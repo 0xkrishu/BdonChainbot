@@ -1,10 +1,11 @@
+require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 
-// Replace with your real token
-const token = '7836884157:AAFP7zs8yU3vwWs0plSo6Oi8093U3gJ_GGQ';
+// Use environment variable for the token
+const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
 let userSessions = {};
@@ -12,7 +13,7 @@ let userSessions = {};
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   userSessions[chatId] = {};
-  bot.sendMessage(chatId, '👋 Hey! Let’s help you find BD leads.\n\nWhat’s your name?');
+  bot.sendMessage(chatId, '👋 Hey! Let\'s help you find BD leads.\n\nWhat\'s your name?');
 });
 
 bot.on('message', (msg) => {
@@ -25,7 +26,7 @@ bot.on('message', (msg) => {
 
   if (!session.name) {
     session.name = text;
-    return bot.sendMessage(chatId, 'Awesome! What’s your role?');
+    return bot.sendMessage(chatId, 'Awesome! What\'s your role?');
   }
 
   if (!session.role) {
