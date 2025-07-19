@@ -20,6 +20,9 @@ bot.on('message', (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
 
+  // Ignore /start command in the generic message handler
+  if (text === '/start') return;
+
   if (!userSessions[chatId]) return;
 
   const session = userSessions[chatId];
@@ -57,5 +60,8 @@ bot.on('message', (msg) => {
 // Simple keyword matcher for now
 function getMatchingLeads(keyword) {
   const data = JSON.parse(fs.readFileSync('projects.json', 'utf8'));
-  return data.filter(p => p.description.toLowerCase().includes(keyword.toLowerCase())).slice(0, 5);
+  return data.filter(p =>
+    p.description.toLowerCase().includes(keyword.toLowerCase()) ||
+    (p.tags && p.tags.some(tag => tag.toLowerCase().includes(keyword.toLowerCase())))
+  ).slice(0, 5);
 }
